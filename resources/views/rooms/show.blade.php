@@ -57,14 +57,14 @@
         <!-- เลื่อนสัปดาห์ -->
         <div class="text-center mb-3">
             <a href="{{ route('rooms.show', ['room' => $room->id, 'week' => $weekOffset - 1, 'slots' => json_encode($selectedSlots)]) }}"
-                class="btn btn-outline-primary btn-lg">
+                class="btn btn-outline-primary btn-lg shadow-sm">
                 <i class="fa fa-arrow-left"></i> สัปดาห์ที่แล้ว
             </a>
-            <span class="mx-4 text-bold" style="font-size: 1.25rem;">
+            <span class="mx-4 font-weight-bold" style="font-size: 1.25rem; color: #333;">
                 {{ $startOfWeek->isoFormat('D MMMM YYYY') }} ถึง {{ $endOfWeek->isoFormat('D MMMM YYYY') }}
             </span>
             <a href="{{ route('rooms.show', ['room' => $room->id, 'week' => $weekOffset + 1, 'slots' => json_encode($selectedSlots)]) }}"
-                class="btn btn-outline-primary btn-lg">
+                class="btn btn-outline-primary btn-lg shadow-sm">
                 สัปดาห์ถัดไป <i class="fa fa-arrow-right"></i>
             </a>
         </div>
@@ -76,7 +76,7 @@
             <input type="hidden" name="weekOffset" value="{{ $weekOffset }}">
             <input type="hidden" name="weeks" value="{{ $weeks }}">
 
-            <button type="submit" class="btn btn-success mt-3 btn-lg w-100">ยืนยันการเลือก</button>
+            <button type="submit" class="btn btn-success mt-3 btn-lg w-100 shadow-sm">ยืนยันการเลือก</button>
         </form>
 
         <div class="table-responsive mt-4">
@@ -105,10 +105,6 @@
                                         'อาทิตย์',
                                     ]),
                                 );
-                                // ตรวจสอบถ้าวันที่คำนวณได้ยังไม่ตรงกับวันที่ที่ต้องการ ให้ปรับเพิ่มวัน
-                                if ($day == 'พฤหัสบดี' && $currentDate->format('d') == '19') {
-                                    $currentDate->addDay();
-                                }
                             @endphp
                             <tr>
                                 <td class="align-middle">
@@ -124,8 +120,7 @@
                                         $slotKey = "{$day}_{$i}_{$weekIndex}";
                                     @endphp
                                     <td class="slot-cell {{ !$booking ? 'available' : 'booked' }} {{ in_array($slotKey, $selectedSlots) ? 'selected' : '' }}"
-                                        data-day="{{ $day }}" data-slot="{{ $i }}"
-                                        data-week="{{ $weekIndex }}">
+                                        data-day="{{ $day }}" data-slot="{{ $i }}" data-week="{{ $weekIndex }}">
                                         @if ($booking)
                                             <span class="text-danger"><strong>{{ $booking->name }}</strong>
                                                 ({{ $booking->reason }})
@@ -136,14 +131,11 @@
                             </tr>
                         @endforeach
                     @endforeach
-
-
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- เพิ่มที่ส่วน <head> หรือ ก่อนปิด </body> -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @if (session('success'))
@@ -224,15 +216,36 @@
         td {
             vertical-align: middle;
             text-align: center;
+            padding: 10px;
         }
 
         th {
             background-color: #007bff;
             color: white;
+            font-weight: bold;
         }
 
         .table-hover tbody tr:hover {
             background-color: #f1f1f1;
+        }
+
+        .btn-outline-primary {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
         }
     </style>
 @endsection
